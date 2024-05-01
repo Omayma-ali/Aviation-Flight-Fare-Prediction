@@ -59,7 +59,7 @@ with st.sidebar:
         
 
     st.sidebar.write("")
-    st.sidebar.markdown("Made by Omayma Ali")
+    st.sidebar.markdown("Made by [Omayma Ali](https://github.com/Omayma-ali)")
 
     # filtering Function
 def filter(airline, source, destination, add_info, month, day, dep_hour):
