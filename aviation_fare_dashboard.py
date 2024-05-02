@@ -206,7 +206,7 @@ with tab2:
                                   destination_pred, add_info_pred]])
 
         Price = model.predict(input_data)
-        st.write('The price for this ticket = ', int(Price)) 
+        st.write('The price for this ticket:', int(Price)) 
 
 
     
