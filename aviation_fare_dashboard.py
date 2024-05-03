@@ -19,51 +19,36 @@ with st.sidebar:
     st.sidebar.subheader("This dashboard for Indian Aviation Flights Fare aimed at predicting the prices of flight tickets")
     st.sidebar.write("")
     
-    # Inputs 
-    col1, col2 = st.columns((5,5))
     data = df.copy()
-    with col1:
-        source = st.sidebar.selectbox("Departure City", ['All'] + list(data['Source'].unique()))
-        # data after Source selection
-        if source != 'All':
-            data = data[data['Source'] == source]
-        
-        destination = st.sidebar.selectbox("Arrival City", ['All'] + list(data['Destination'].unique()))
-        # data after Source and Destination selection
-        if destination != 'All':
-            data = data[data['Destination'] == destination]
+    source = st.sidebar.selectbox("Departure City", ['All'] + list(data['Source'].unique()))
+    # data after Source selection
+    if source != 'All':
+        data = data[data['Source'] == source]
+    
+    destination = st.sidebar.selectbox("Arrival City", ['All'] + list(data['Destination'].unique()))
+    # data after Source and Destination selection
+    if destination != 'All':
+        data = data[data['Destination'] == destination]
 
-        month = st.sidebar.selectbox("Month", ['All'] + list(data['Month'].unique()))
-        # data after Source and Destination and Month selection
-        if month != 'All':
-            data = data[data['Month'] == month]
-    with col2:
-        day = st.sidebar.selectbox("Day", ['All'] + list(data['Day'].unique()))
-        # data after Source and Destination and Month and Day selection
-        if day != 'All':
-            data = data[data['Day'] == day]
+    duration = data[(data['Source'] == source) & (data['Destination'] == destination)]
+    
+    airline = st.sidebar.selectbox("Airline Carrier", ['All'] + list(data['Airline'].unique()))
+    # data after Source and Destination and Month and Day selection and departure hour selection and airline selection
+    if airline != 'All':
+        data = data[data['Airline'] == airline]
 
-        dep_hour = st.sidebar.selectbox("Departure Hour", ['All'] + list(data['Dep_Hour'].unique()))
-        # data after Source and Destination and Month and Day selection and departure hour selection
-        if dep_hour != 'All':
-            data = data[data['Dep_Hour'] == dep_hour]
+    add_info = st.sidebar.selectbox("Additional Services", ['All'] + list(data['Additional_Info'].unique()))
 
-        airline = st.sidebar.selectbox("Airline Carrier", ['All'] + list(data['Airline'].unique()))
-        # data after Source and Destination and Month and Day selection and departure hour selection and airline selection
-        if airline != 'All':
-            data = data[data['Airline'] == airline]
+    filter_box = st.sidebar.selectbox("Filter on", [None, 'Day', 'Month', 'Dep_Hour'])
 
-        duration = data[(data['Airline'] == airline) & (data['Source'] == source) & (data['Destination'] == destination)]
-        
-        add_info = st.sidebar.selectbox("Additional Services", ['All'] + list(data['Additional_Info'].unique()))
-        
+
 
     st.sidebar.write("")
     st.sidebar.markdown("Made by [Omayma Ali](https://github.com/Omayma-ali)")
 
     # filtering Function
-def filter(airline, source, destination, add_info, month, day, dep_hour):
-    if airline=='All' and source=='All' and destination=='All' and add_info=='All' and month=='All' and day=='All' and dep_hour=='All':
+def filter(airline, source, destination, add_info):
+    if airline=='All' and source=='All' and destination=='All' and add_info=='All':
         filtered_data = data.copy()
     else:
         filtered_data = data
@@ -73,15 +58,6 @@ def filter(airline, source, destination, add_info, month, day, dep_hour):
 
         if destination != 'All':
             filtered_data = filtered_data[filtered_data['Destination'] == destination]
-
-        if month != 'All':
-            filtered_data = filtered_data[filtered_data['Month'] == month]
-        
-        if day != 'All':
-            filtered_data = filtered_data[filtered_data['Day'] == day]
-
-        if dep_hour != 'All':
-            filtered_data = filtered_data[filtered_data['Dep_Hour'] == dep_hour]
 
         if airline != 'All':
             filtered_data = filtered_data[filtered_data['Airline'] == airline]
@@ -95,7 +71,7 @@ def filter(airline, source, destination, add_info, month, day, dep_hour):
 card1, card2, card3, card4 = st.columns((2,2,2,4))
 
 # Filtered DataFrame
-filtered_data = filter(airline, source, destination, add_info, month, day, dep_hour)
+filtered_data = filter(airline, source, destination, add_info)
 
 # Cards Values
 flight_count = filtered_data['Airline'].count()
@@ -123,9 +99,12 @@ with tab1:
                      hole=0.4)
         st.plotly_chart(fig, use_container_width=True)
 
+    # Get the top airlines based on the most_airline index
+    top_airlines = most_airline.index.tolist()
     with visual2:
         st.subheader('Airline Price')
-        airline_price = filtered_data.groupby(['Airline'])['Price'].min().sort_values(ascending=False).head(15)
+        airline_price = filtered_data[filtered_data['Airline'].isin(top_airlines)].\
+            groupby('Airline')['Price'].max().sort_values(ascending=False)        
         fig = px.bar(airline_price, 
                      x=airline_price.index, 
                      y=airline_price.values, 
@@ -134,16 +113,18 @@ with tab1:
         fig.update_xaxes(title='Airline')
         fig.update_yaxes(title='Price')
         st.plotly_chart(fig, use_container_width=True) 
+    
 
     st.subheader('Duration vs Price')
-    fig = px.scatter(data, 
-                x='Duration', 
-                y='Price', 
-                color='Airline',
-                size='Price')
+    fig = px.scatter(filtered_data,
+                    x='Duration',
+                    y='Price',
+                    color=filter_box,
+                    )
     # Customize x-axis and y-axis labels
     fig.update_xaxes(title='Duration')
     fig.update_yaxes(title='Price')
+    st.plotly_chart(fig, use_container_width=True)
     # Customize the width and placement of the legend
     fig.update_layout(
         legend=dict(
@@ -156,7 +137,7 @@ with tab1:
             traceorder='normal'
         )
     )
-    st.plotly_chart(fig, use_container_width=True) 
+
 
 # predicting Model
 with tab2:
@@ -181,9 +162,11 @@ with tab2:
                     'Delhi':2, 'Hyderabad':3}.get(destination_pred, destination_pred)
         
         stops_pred= int(st.selectbox("Stops", options= df['Total_Stops'].unique()))
-
+        
         duration_pred_scaled = sc.fit_transform([[int(st.number_input("Flight Duration (in minutes)",
                                                                     min_value=0, step=10))]])
+    
+        
     
     with col2:
                 
