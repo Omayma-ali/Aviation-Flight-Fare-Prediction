@@ -91,7 +91,7 @@ tab1, tab2 = st.tabs(["📈 Analyze", "🤖 Predict"])
 with tab1:   
     visual1, visual2 = st.columns((5, 5))
     with visual1:
-        st.subheader('The Most Airline Count')
+        st.subheader('Top Airlines')
         most_airline = filtered_data['Airline'].value_counts().sort_values(ascending=False).head()
         fig = px.pie(data_frame=most_airline, 
                      names=most_airline.index, 
@@ -102,9 +102,8 @@ with tab1:
     # Get the top airlines based on the most_airline index
     top_airlines = most_airline.index.tolist()
     with visual2:
-        st.subheader('Airline Price')
-        airline_price = filtered_data[filtered_data['Airline'].isin(top_airlines)].\
-            groupby('Total_Stop')['Price'].max().sort_values(ascending=False)        
+        st.subheader('Stops Price')
+        airline_price = filtered_data.groupby('Total_Stops')['Price'].mean().sort_values(ascending=False)        
         fig = px.bar(airline_price, 
                      x=airline_price.index, 
                      y=airline_price.values, 
