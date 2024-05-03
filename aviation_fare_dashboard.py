@@ -104,13 +104,13 @@ with tab1:
     with visual2:
         st.subheader('Airline Price')
         airline_price = filtered_data[filtered_data['Airline'].isin(top_airlines)].\
-            groupby('Airline')['Price'].max().sort_values(ascending=False)        
+            groupby('Total_Stop')['Price'].max().sort_values(ascending=False)        
         fig = px.bar(airline_price, 
                      x=airline_price.index, 
                      y=airline_price.values, 
                      color=airline_price.values)
          # Customize x-axis and y-axis labels
-        fig.update_xaxes(title='Airline')
+        fig.update_xaxes(title='Stops')
         fig.update_yaxes(title='Price')
         st.plotly_chart(fig, use_container_width=True) 
     
