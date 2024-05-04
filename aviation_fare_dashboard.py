@@ -102,16 +102,15 @@ with tab1:
     # Get the top airlines based on the most_airline index
     top_airlines = most_airline.index.tolist()
     with visual2:
-        st.subheader('Stops Price')
-        airline_price = filtered_data.groupby('Total_Stops')['Price'].mean().sort_values(ascending=False)        
+        st.subheader('Airline Price')
+        airline_price = filtered_data[filtered_data['Airline'].isin(top_airlines)].groupby('Airline')['Price'].min().sort_values(ascending=False)
         fig = px.bar(airline_price, 
-                     x=airline_price.index, 
-                     y=airline_price.values, 
-                     color=airline_price.values)
-         # Customize x-axis and y-axis labels
-        fig.update_xaxes(title='Stops')
+                    x=airline_price.index, 
+                    y=airline_price.values)
+        # Customize x-axis and y-axis labels
+        fig.update_xaxes(title='Airline')
         fig.update_yaxes(title='Price')
-        st.plotly_chart(fig, use_container_width=True) 
+        st.plotly_chart(fig, use_container_width=True)
     
 
     st.subheader('Duration vs Price')
