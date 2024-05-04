@@ -14,7 +14,7 @@ st.set_page_config(page_title="Aviation flights fare", page_icon="✈️", layou
 df = pd.read_csv('cleaned_df.csv')
 
 with st.sidebar:
-    
+
     st.sidebar.image('R.jpg')
     st.sidebar.subheader("This dashboard for Indian Aviation Flights Fare aimed at predicting the prices of flight tickets")
     st.sidebar.write("")
@@ -39,7 +39,7 @@ with st.sidebar:
 
     add_info = st.sidebar.selectbox("Additional Services", ['All'] + list(data['Additional_Info'].unique()))
 
-    filter_box = st.sidebar.selectbox("Filter on", [None, 'Day', 'Month', 'Dep_Hour'])
+    filter_box = st.sidebar.selectbox("Filter Prices on", [None, 'Day', 'Month', 'Dep_Hour'])
 
 
 
@@ -64,7 +64,7 @@ def filter(airline, source, destination, add_info):
 
         if add_info != 'All':
             filtered_data = filtered_data[filtered_data['Additional_Info'] == add_info]
-  
+
     return filtered_data
 
 # Information Cards
@@ -85,10 +85,42 @@ card3.metric("Lowest Price", f"{lowest_Price}")
 card4.metric("Top Airline", f"{top_airline}")
 
 # Dashboard Tabs
-tab1, tab2 = st.tabs(["📈 Analyze", "🤖 Predict"])
+tab1, tab2, tab3 = st.tabs(["🏠 Home", "📈 Insights", "🤖 Prediction"])
+# introduction
+with tab1:
+    st.write("If you are a traveler looking to plan your next trip, or you are an airline or travel agency, "
+         "you need to know about ticket and service price variations.\n"
+         "Airline ticket pricing has become increasingly complex due to factors such as demand fluctuations and seasonal trends.\n"
+         "\n"
+         "My project aims to help you make the right decision and buy the best ticket at the best price by developing a predictive model "
+         "that can accurately estimate flight fares based on the given features.")
+   
+    im1 = Image.open('how airline ticketing system work.jpg')
+    im2 = Image.open('images.png')
+    im3 = Image.open('1686635188.webp')
+    im4 = Image.open('images (1).jpg')
+    im5 = Image.open('images1.jpg')
+    # Images2 Cards for flight ticket booking stages
+    img1, img2 = st.columns((5, 5))
+    # Display the images in the columns
+    img1.image(im1, 
+               caption='flight ticket booking stages')
+    img2.image(im2, 
+               caption='Decide The best Time and Day to book Flight')
+    
+    img3, img4 = st.columns((5, 5))
+    img3.image(im3, 
+              caption='Choose the cheap Flight')
+    img4.image(im4, 
+                caption='Book the flight')
+    img5 = st
+    img5.image(im5, 
+              caption='Have a nice flight')
+    
 
 # Data Analysis
-with tab1:   
+with tab2:
+   
     visual1, visual2 = st.columns((5, 5))
     with visual1:
         st.subheader('Top Airlines')
@@ -110,7 +142,7 @@ with tab1:
         # Customize x-axis and y-axis labels
         fig.update_xaxes(title='Airline')
         fig.update_yaxes(title='Price')
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, use_container_width=True) 
     
 
     st.subheader('Duration vs Price')
@@ -138,7 +170,7 @@ with tab1:
 
 
 # predicting Model
-with tab2:
+with tab3:
 
     model = joblib.load('aviation_flight_fare_prediction_model.p')    
     sc = StandardScaler()
@@ -173,29 +205,28 @@ with tab2:
                     '1 Short layover':1, '1 Long layover':0, 'Change airports':4,
                     'Business class':3, 'Red-eye flight':8, '2 Long layover':2}.get(add_info_pred, add_info_pred)
 
-        day_pred= int(st.selectbox("Day", options= df['Day'].unique()))
-        month_pred= int(st.selectbox("Month", options= df['Month'].unique()))
+        # day_pred= int(st.selectbox("Day", options= df['Day'].unique()))
+        # month_pred= int(st.selectbox("Month", options= df['Month'].unique()))
 
-        st.write('If the minutes more than 30, Please increase the hour by 1')
+        # Date Selection
+        today = date.today()
+        min_date = today + pd.DateOffset(days=1)
+        max_date = today + pd.DateOffset(months=6)
+        selected_date = st.date_input('Select a date', min_value=min_date, max_value=max_date, value=min_date)
+
+        st.write(' ')
+        st.write(' ')
+        st.write('for Departure Hour, If the minutes more than 30, Please increase the hour by 1')
+        
         dep_hour_pred_scaled = sc.fit_transform([[int(st.number_input("Departure Hour (24 format)",
                                                                     min_value=0))]])
 
     # Submit Button
     if st.button("Submit 👇"):
-        input_data = np.array([[duration_pred_scaled[0][0], stops_pred, day_pred, month_pred, 
+        input_data = np.array([[duration_pred_scaled[0][0], stops_pred, selected_date.day, selected_date.month, 
                                 dep_hour_pred_scaled[0][0], airline_pred, source_pred,
                                   destination_pred, add_info_pred]])
 
         Price = model.predict(input_data)
-        st.write('The price for this ticket:', int(Price)) 
-
-
-    
-
-
-
-        
-    
-
-      
- 
+        # Display the price as a metric
+        st.metric("Ticket Price", int(Price))
