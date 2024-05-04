@@ -96,10 +96,10 @@ with tab1:
          "that can accurately estimate flight fares based on the given features.")
    
     im1 = Image.open('how airline ticketing system work.jpg')
-    im2 = Image.open('images.png')
-    im3 = Image.open('1686635188.webp')
-    im4 = Image.open('images (1).jpg')
-    im5 = Image.open('images1.jpg')
+    im2 = Image.open('image1.png')
+    im3 = Image.open('image2.webp')
+    im4 = Image.open('image3.jpg')
+    im5 = Image.open('image4.jpg')
     # Images2 Cards for flight ticket booking stages
     img1, img2 = st.columns((5, 5))
     # Display the images in the columns
