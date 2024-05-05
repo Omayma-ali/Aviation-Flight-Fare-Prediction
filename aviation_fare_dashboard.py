@@ -15,7 +15,7 @@ df = pd.read_csv('cleaned_df.csv')
 
 with st.sidebar:
 
-    st.sidebar.image('R.jpg')
+    
     st.sidebar.subheader("This dashboard for Indian Aviation Flights Fare aimed at predicting the prices of flight tickets")
     st.sidebar.write("")
     
