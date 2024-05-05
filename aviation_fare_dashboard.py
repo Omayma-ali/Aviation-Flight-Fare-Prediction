@@ -95,27 +95,10 @@ with tab1:
          "My project aims to help you make the right decision and buy the best ticket at the best price by developing a predictive model "
          "that can accurately estimate flight fares based on the given features.")
    
-    im1 = Image.open('how airline ticketing system work.jpg')
-    im2 = Image.open('image1.png')
-    im3 = Image.open('image2.webp')
-    im4 = Image.open('image3.jpg')
-    im5 = Image.open('image4.jpg')
-    # Images2 Cards for flight ticket booking stages
-    img1, img2 = st.columns((5, 5))
-    # Display the images in the columns
-    img1.image(im1, 
-               caption='flight ticket booking stages')
-    img2.image(im2, 
-               caption='Decide The best Time and Day to book Flight')
-    
-    img3, img4 = st.columns((5, 5))
-    img3.image(im3, 
-              caption='Choose the cheap Flight')
-    img4.image(im4, 
-                caption='Book the flight')
+    im1 = Image.open('R.jpg')
+
     img5 = st
-    img5.image(im5, 
-              caption='Have a nice flight')
+    img5.image(im1)
     
 
 # Data Analysis
