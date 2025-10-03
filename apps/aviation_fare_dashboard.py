@@ -11,11 +11,11 @@ from datetime import datetime, date
 st.set_page_config(page_title="Aviation flights fare", page_icon="✈️", layout='wide')
 
 # Loading data
-df = pd.read_csv('cleaned_df.csv')
+df = pd.read_csv('data/cleaned_df.csv')
 
 with st.sidebar:
 
-    st.sidebar.image('R.jpg')
+    st.sidebar.image('images/R.jpg')
     st.sidebar.subheader("This dashboard for Indian Aviation Flights Fare aimed at predicting the prices of flight tickets")
     st.sidebar.write("")
     
@@ -95,7 +95,7 @@ with tab1:
          "My project aims to help you make the right decision and buy the best ticket at the best price by developing a predictive model "
          "that can accurately estimate flight fares based on the given features.")
    
-    im1 = Image.open('R.jpg')
+    im1 = Image.open('images/R.jpg')
 
     img5 = st
     img5.image(im1)
@@ -155,7 +155,7 @@ with tab2:
 # predicting Model
 with tab3:
 
-    model = joblib.load('aviation_flight_fare_prediction_model.p')    
+    model = joblib.load('models/aviation_flight_fare_prediction_model.p')    
     sc = StandardScaler()
 
     # Inputs 
