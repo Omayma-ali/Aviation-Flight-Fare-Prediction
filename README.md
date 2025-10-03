@@ -105,6 +105,8 @@ python src/train_model.py --data data/train_raw.csv --output models/flight_fare_
 
 
 ![Prediction Plot](images/predection.png)
+
+
 ![Analysis Plot](images/insights1.png)
 
 
