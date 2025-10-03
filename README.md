@@ -10,6 +10,12 @@ Flight prices vary based on multiple factors such as airline, source, destinatio
 The goal of this project is to build a predictive model that estimates ticket prices and visualize results interactively.
 
 ---
+## 🚀 Live Demo
+
+Try the live app here:  
+[![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)]([https://predictive-maintenance-depi.streamlit.app/](https://aviation-flight-fare-prediction.streamlit.app/))
+
+---
 
 ## 📂 Repository Structure
 ```
@@ -127,7 +133,8 @@ python src/train_model.py --data data/train_raw.csv --output models/flight_fare_
 ## 👩‍💻 Author
 **Omayma Ali** — Data Scientist & Machine Learning Engineer  
 
-- [GitHub](https://github.com/Omayma-ali)  
+- [GitHub](https://github.com/Omayma-ali)
+- [Kaggle](https://www.kaggle.com/code/omaymaali/aviation-flight-fare-insights-prediction-model)
 - [LinkedIn](www.linkedin.com/in/omayma-ali)  
 - [Fiverr](https://www.fiverr.com/users/omaymaaa)
 - [Khamsat](https://khamsat.com/user/omayma_ali)
