@@ -13,7 +13,7 @@ The goal of this project is to build a predictive model that estimates ticket pr
 ## 🚀 Live Demo
 
 Try the live app here:  
-[![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)]([https://predictive-maintenance-depi.streamlit.app/](https://aviation-flight-fare-prediction.streamlit.app/))
+[![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://aviation-flight-fare-prediction.streamlit.app/)
 
 ---
 
